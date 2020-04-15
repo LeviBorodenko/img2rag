@@ -1,7 +1,7 @@
 ## img2rag
 
 Convert any image into its [Region Adjacency Graph](https://ieeexplore.ieee.org/document/841950) which can be used for either image segmentation or to create a graph embedding of the image.
-
+![scheme](scheme.jpeg)
 <hr>
 
 ### Installation
@@ -10,9 +10,7 @@ Simply run `pip install img2rag`
 
 ### What is does
 
-![scheme](scheme.jpeg)
-
-Given an image, we segement it into morphological regions using first[Felzenszwalb segmentation](http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf) followed by a[threshold-cut](https://ieeexplore.ieee.org/document/841950). Given these segmeneted regions, we now construct the following graph:
+Given an image, we segement it into morphological regions using first [Felzenszwalb segmentation](http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf) followed by a [threshold-cut](https://ieeexplore.ieee.org/document/841950). We then use the segmeneted regions to construct the following graph:
 
 1. Each node corresponds to a segmented region.
 2. We connect two regions if they are adjacent.
