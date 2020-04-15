@@ -1,4 +1,4 @@
-## iamge2rag
+## img2rag
 
 Convert any image into its[Region Adjacency Graph](https://ieeexplore.ieee.org/document/841950) which can be used for either image segmentation or to create a graph embedding of the image.
 
@@ -6,7 +6,7 @@ Convert any image into its[Region Adjacency Graph](https://ieeexplore.ieee.org/d
 
 ### Installation
 
-Simply run `pip install image2rag`
+Simply run `pip install img2rag`
 
 ### What is does
 
@@ -20,7 +20,7 @@ This is the so - called region - adjacency graph. Furthermore, we add the follow
 1. Location of the region centeriod
 2. Orientation of the region
 3. Mean and total color of the region
-4. Size
+4. Size in px
 
 The edges contain the mean - color - difference between the two regions
 
@@ -30,7 +30,7 @@ Simply import the `RAGimage` class and initiate with any image. Then use the bui
 
 
 ```python
-from image2rag import RAGimage
+from img2rag import RAGimage
 
 # We assume the image is given as a numpy array or tf.Tensor with either 2 or 3 dimensions
 # where the third dimension is the optional channel dimension.
