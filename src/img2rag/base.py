@@ -35,7 +35,7 @@ class RAGimage(object):
     """
 
     def __init__(self, image_tensor: np.ndarray, rag_threshold: float = 100):
-        super(Image, self).__init__()
+        super(RAGimage, self).__init__()
 
         # convert to numpy array if necessary
         # and check if number of dimensions
@@ -104,13 +104,6 @@ class RAGimage(object):
         # segmentation
         rag = graph.rag_mean_color(self.image_tensor, self.segmentation_labels)
 
-        # now we perform rag thresholding and return the labels
-        # labels = graph.cut_threshold(
-        #     labels=self.segmentation_labels,
-        #     rag=rag,
-        #     thresh=self.rag_threshold,
-        #     in_place=True,
-        # )
         labels = graph.cut_threshold(self.segmentation_labels, rag, thresh=20)
 
         # create rag from these new labels
