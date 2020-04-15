@@ -17,7 +17,7 @@ __copyright__ = "Levi Borodenko"
 __license__ = "mit"
 
 
-class Image(object):
+class RAGimage(object):
     """Takes an image and allows you to calculate
     a Region Adjacency Graph based of k-means and
     a subsequent threshold cut.
@@ -34,7 +34,7 @@ class Image(object):
             (default: {25})
     """
 
-    def __init__(self, image_tensor: np.ndarray, rag_threshold: float = 25):
+    def __init__(self, image_tensor: np.ndarray, rag_threshold: float = 100):
         super(Image, self).__init__()
 
         # convert to numpy array if necessary
@@ -75,10 +75,7 @@ class Image(object):
             np.ndarray: label array
         """
 
-        # Do k-means segementation of the image
-        label = segmentation.slic(
-            self.image_tensor, compactness=30, n_segments=400, max_iter=10, **kwargs
-        )
+        label = segmentation.felzenszwalb(self.image_tensor, **kwargs)
 
         return label
 
@@ -108,12 +105,13 @@ class Image(object):
         rag = graph.rag_mean_color(self.image_tensor, self.segmentation_labels)
 
         # now we perform rag thresholding and return the labels
-        labels = graph.cut_threshold(
-            labels=self.segmentation_labels,
-            rag=rag,
-            thresh=self.rag_threshold,
-            in_place=True,
-        )
+        # labels = graph.cut_threshold(
+        #     labels=self.segmentation_labels,
+        #     rag=rag,
+        #     thresh=self.rag_threshold,
+        #     in_place=True,
+        # )
+        labels = graph.cut_threshold(self.segmentation_labels, rag, thresh=20)
 
         # create rag from these new labels
         rag = graph.rag_mean_color(self.image_tensor, labels)
@@ -297,7 +295,7 @@ class ShardFuser(object):
         self.save_file = Path(save_file)
 
     def fuse(self):
-        result = {"edge_list": [], "signal": [], "label": []}
+        result = []
 
         for file in self.data_folder.iterdir():
 
@@ -305,18 +303,20 @@ class ShardFuser(object):
 
                 data_list = pickle.load(pickled)
 
-                for data_item, label in data_list:
+                for data_item in data_list:
 
-                    result["edge_list"].append(data_item["edge_list"])
-                    result["signal"].append(data_item["signal"])
-                    result["label"].append(label)
+                    result.append(data_item)
 
         with open(self.save_file, "wb") as save_file:
             pickle.dump(result, save_file)
 
 
 if __name__ == "__main__":
-    with open("./train/caltech101_train.pickle", "rb") as f:
-        load = pickle.load(f)
+    caltech = tfds.load("caltech101", as_supervised=True)
+    train = caltech["train"]
 
-        print(load["signal"][-100].shape)
+    dataset = train.shuffle(1000).take(1)
+
+    for img, label in dataset:
+        image = Image(img, rag_threshold=10)
+        image.show_result()
