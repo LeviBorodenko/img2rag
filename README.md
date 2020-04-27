@@ -10,7 +10,7 @@ Simply run `pip install img2rag`
 
 ### What is does
 
-Given an image, we segement it into morphological regions using first [Felzenszwalb segmentation](http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf) followed by a [threshold-cut](https://ieeexplore.ieee.org/document/841950). We then use the segmeneted regions to construct the following graph:
+Given an image, we segement it into perceptually significant regions using first [Felzenszwalb segmentation](http://people.cs.uchicago.edu/~pff/papers/seg-ijcv.pdf) followed by a [threshold-cut](https://ieeexplore.ieee.org/document/841950). We then use the segmented regions to construct the following graph:
 
 1. Each node corresponds to a segmented region.
 2. We connect two regions if they are adjacent.
