@@ -36,7 +36,7 @@ from img2rag import RAGimage
 # where the third dimension is the optional channel dimension.
 img_tensor = [...]
 
-# initiate RAGiamge instance
+# initiate RAGimage instance
 image_rag = RAGimage(img_tensor)
 
 # RAG as a networkx attributed DiGraph
